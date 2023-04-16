@@ -1189,8 +1189,11 @@ bool export_h_file(void) {
 			}
 		}
 		fprintf(file, "\n");
-		fprintf(file, "BANKREF_EXTERN(%s)\n", data_name.c_str());
-		fprintf(file, "\n");
+
+		if (bank) {
+			fprintf(file, "BANKREF_EXTERN(%s)\n", data_name.c_str());
+			fprintf(file, "\n");
+		}
 
 		// If we are not using a source tileset, or if we have extra palettes defined
 		if ((image.total_color_count - source_total_color_count > 0 || !use_source_tileset) && include_palettes) {
@@ -1256,7 +1259,10 @@ bool export_c_file(void) {
 	fprintf(file, "#include <gbdk/platform.h>\n");
 	fprintf(file, "#include <gbdk/metasprites.h>\n");
 
-	fprintf(file, "BANKREF(%s)\n\n", data_name.c_str());
+	if (bank) {
+		fprintf(file, "\n");
+		fprintf(file, "BANKREF(%s)\n\n", data_name.c_str());
+	}
 
 	// Are we not using a source tileset, or do we have extra colors
 	if ((image.total_color_count - source_total_color_count > 0 || !use_source_tileset) && include_palettes) {
